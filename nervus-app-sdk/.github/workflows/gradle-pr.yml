@@ -1,0 +1,39 @@
+name: Gradle PR checks
+
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout nervus-app-sdk
+        uses: actions/checkout@v7
+        with:
+          path: nervus-app-sdk
+
+      - name: Checkout current nervus-ipc
+        uses: actions/checkout@v7
+        with:
+          repository: Nervus-OS/nervus-ipc
+          ref: master
+          path: nervus-ipc
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Build and test
+        working-directory: nervus-app-sdk
+        run: bash ./gradlew check --no-daemon

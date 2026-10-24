@@ -1,0 +1,20 @@
+# Gradle build output
+build/
+.gradle/
+.kotlin/
+
+# Temporary cloned proto repo
+.nervus-ipc-clone/
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+docs/*

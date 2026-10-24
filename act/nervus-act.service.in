@@ -1,0 +1,33 @@
+[Unit]
+Description=NervusOS ACT engine: record demonstrations, run learned policies, hand training to the Mac
+Documentation=file:///opt/nervus/act/README.md
+# Starts with NervusOS (nervud pulls it in) and stops when NervusOS quits.
+PartOf=nervud.service
+After=nervus-piper.service
+Wants=nervus-piper.service
+
+[Service]
+Type=simple
+# The desktop user: the shared folder (~/Shared/NervusACT) is theirs, synced by their Syncthing.
+User=@USER@
+Group=@USER@
+SupplementaryGroups=video
+WorkingDirectory=/opt/nervus/act
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/opt/nervus/act
+Environment=HF_HOME=/var/lib/nervus-act/hf
+Environment=XDG_CACHE_HOME=/var/lib/nervus-act/cache
+Environment=MPLCONFIGDIR=/var/lib/nervus-act/cache/mpl
+StateDirectory=nervus-act
+# Loopback only: the API moves the arm and has no authentication (the engine refuses anything else too).
+ExecStart=/opt/nervus/act/venv/bin/python -m nervus_act --bind 127.0.0.1 --port 8795 --shared @HOME@/Shared/NervusACT --cameras wrist=Dabai_DC1,scene=046d_0825 --threads 4
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=20s
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=@HOME@/Shared/NervusACT
+PrivateTmp=yes
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=nervus-act

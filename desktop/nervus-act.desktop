@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=ACT Studio
+Comment=Teach the PiPER by demonstration, train on the Mac, run and improve what it learned
+Exec=/usr/local/bin/nervus-standalone act
+Icon=nervus-act
+Terminal=false
+Categories=Development;Robotics;
+Keywords=nervus;robot;piper;act;training;lerobot;
+StartupNotify=false

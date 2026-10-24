@@ -1,0 +1,12 @@
+// Lets the desktop user start and stop the PiPER apps' services without a password, and nothing else.
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.systemd1.manage-units" && subject.user == "@USER@") {
+        var unit = action.lookup("unit");
+        var verb = action.lookup("verb");
+        var ours = ["nervus-piper.service", "nervus-act.service", "nervus-llm-arm.service",
+                    "nervus-surface-camera.service"];
+        if (ours.indexOf(unit) >= 0 && (verb == "start" || verb == "stop" || verb == "restart")) {
+            return polkit.Result.YES;
+        }
+    }
+});

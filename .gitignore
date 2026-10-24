@@ -1,0 +1,11 @@
+build/
+.gradle/
+.kotlin/
+__pycache__/
+*.pyc
+.venv/
+venv/
+**/signing/*.pem
+*.pem
+local.properties
+.DS_Store

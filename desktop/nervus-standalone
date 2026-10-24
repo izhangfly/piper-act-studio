@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Run a robot app as an ordinary Ubuntu desktop app, without NervusOS: start the services it needs
+# (systemd units the desktop user may start, see polkit/50-nervus-hosted.rules.in), then open its window.
+#
+#   nervus-standalone llmarm       LLM Arm: PiPER driver, ACT engine (cameras), LLM Arm service
+#   nervus-standalone handteleop   Hand Teleop: PiPER driver, the Surface front camera bridge
+#   nervus-standalone act          ACT Studio: PiPER driver, ACT engine (record, train on the Mac, run)
+set -u
+APP="${1:?usage: nervus-standalone llmarm|handteleop|act}"
+APPS=/opt/nervus/apps
+say() { notify-send -a NervusOS "${TITLE:-NervusOS}" "$1" 2>/dev/null || echo "$1" >&2; }
+start() { for u in "$@"; do systemctl start "$u" || say "Could not start $u (journalctl -u $u)"; done; }
+
+case "$APP" in
+llmarm)
+	TITLE="LLM Arm"
+	start nervus-piper.service nervus-act.service nervus-llm-arm.service
+	exec "$APPS/llm-arm/bin/llm-arm" --standalone
+	;;
+handteleop)
+	TITLE="Hand Teleop"
+	units=(nervus-piper.service)
+	systemctl cat nervus-surface-camera.service >/dev/null 2>&1 && units+=(nervus-surface-camera.service)
+	start "${units[@]}"
+	"$APPS/hand-teleop/bin/hand-teleop" --standalone
+	rc=$?
+	# The camera bridge runs the image pipeline in software: don't leave it running.
+	[[ " ${units[*]} " == *" nervus-surface-camera.service "* ]] && systemctl stop nervus-surface-camera.service
+	exit $rc
+	;;
+act)
+	TITLE="ACT Studio"
+	start nervus-piper.service nervus-act.service
+	exec "$APPS/act-studio/bin/act-studio" --standalone
+	;;
+*) echo "unknown app: $APP" >&2; exit 2 ;;
+esac

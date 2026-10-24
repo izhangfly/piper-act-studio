@@ -1,0 +1,19 @@
+# Gradle build outputs
+build/
+.gradle/
+.kotlin/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local configuration
+local.properties
+*.log
