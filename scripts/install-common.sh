@@ -22,6 +22,10 @@ install_driver() {
 		--shell /usr/sbin/nologin nervus-piper
 	install -d -m 0755 /opt/nervus/piper
 	install -m 0644 "$REPO/driver/piper_webctl.py" "$REPO/driver/panel.html" "$REPO/driver/README.md" /opt/nervus/piper/
+	install -m 0755 "$REPO/driver/piper_control.py" /opt/nervus/piper/
+	DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3-gi gir1.2-webkit2-4.1 >/dev/null
+	install -D -m 0644 "$REPO/desktop/nervus-piper-control.desktop" /usr/share/applications/nervus-piper-control.desktop
+	install -D -m 0644 "$REPO/desktop/nervus-piper-control.svg" /usr/share/icons/hicolor/scalable/apps/nervus-piper-control.svg
 	[[ -x /opt/nervus/piper/venv/bin/python ]] || python3 -m venv /opt/nervus/piper/venv
 	/opt/nervus/piper/venv/bin/pip install -q -r "$REPO/driver/requirements.txt"
 	install -D -m 0755 "$REPO/driver/can-up" /usr/libexec/nervus/can-up

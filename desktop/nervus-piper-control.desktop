@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=PiPER Control
+Comment=Joint sliders, Cartesian jog, gripper, home and e-stop for the PiPER arm (starts the arm driver)
+Exec=/usr/local/bin/nervus-standalone control
+Icon=nervus-piper-control
+Terminal=false
+Categories=Development;Robotics;
+Keywords=piper;robot;arm;joint;cartesian;jog;
+StartupNotify=true
