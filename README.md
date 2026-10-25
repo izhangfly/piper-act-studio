@@ -68,7 +68,7 @@ cd act-studio && ACT_ENGINE_TEST=http://127.0.0.1:8899 ./gradlew test   # the ap
 | `act/mac/` | The training worker: dataset builder, train supervisor, gate, promotion |
 | `act/tests/` | End-to-end test on a simulated arm, unit tests |
 | `act-studio/` | The app (Kotlin, Compose Desktop) |
-| `driver/` | The PiPER driver (Python, piper_sdk): HTTP API on loopback, safety layer, systemd units |
+| `driver/` | The PiPER driver (Python, piper_sdk): HTTP API on loopback, safety layer, systemd units, and **PiPER Control**, its joint/Cartesian panel as a desktop app |
 | `desktop/` | Desktop entry, icon, `nervus-standalone` launcher |
 | `nervus-app-sdk/`, `nervus-packaging/`, `nervus-ipc/` | NervusOS app SDK, used when it runs inside NervusOS |
 
